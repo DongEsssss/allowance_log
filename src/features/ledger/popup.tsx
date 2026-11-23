@@ -10,7 +10,7 @@ export function closePopup() {
   else router.replace('/');
 }
 
-export function Popup({ title, children, footer }: { title: string; children: ReactNode; footer?: ReactNode }) {
+export function Popup({ title, children, footer, scrollEnabled = true }: { title: string; children: ReactNode; footer?: ReactNode; scrollEnabled?: boolean }) {
   const { colors, ui } = useAppearance();
 
   return (
@@ -31,7 +31,7 @@ export function Popup({ title, children, footer }: { title: string; children: Re
           </View>
 
           {/* ────────── 스크롤되는 내용과 하단 버튼 ────────── */}
-          <ScrollView style={styles.scroll} contentContainerStyle={styles.body} keyboardShouldPersistTaps="handled">
+          <ScrollView scrollEnabled={scrollEnabled} style={styles.scroll} contentContainerStyle={styles.body} keyboardShouldPersistTaps="handled">
             {children}
           </ScrollView>
           {footer && <View style={styles.footer}>{footer}</View>}
@@ -43,14 +43,14 @@ export function Popup({ title, children, footer }: { title: string; children: Re
 
 const styles = StyleSheet.create({
   root: { flex: 1 },
-  backdrop: { backgroundColor: 'rgba(5, 16, 35, 0.58)' },
+  backdrop: { backgroundColor: 'rgba(15, 22, 17, 0.55)' },
   position: { flex: 1, justifyContent: 'center', alignItems: 'center', padding: 14 },
-  panel: { width: '100%', maxWidth: 456, maxHeight: '100%', borderRadius: 24, overflow: 'hidden' },
-  header: { paddingLeft: 20, paddingRight: 12, paddingTop: 12, flexDirection: 'row', alignItems: 'center' },
+  panel: { width: '100%', maxWidth: 456, maxHeight: '100%', borderRadius: 18, overflow: 'hidden' },
+  header: { paddingLeft: 24, paddingRight: 16, paddingTop: 18, flexDirection: 'row', alignItems: 'center' },
   title: { flex: 1, fontSize: 25 },
   close: { minWidth: 44, minHeight: 44, alignItems: 'center', justifyContent: 'center' },
   closeText: { fontSize: 28, lineHeight: 32 },
   scroll: { flexGrow: 0, flexShrink: 1 },
-  body: { paddingHorizontal: 20, paddingTop: 8, paddingBottom: 16 },
-  footer: { paddingHorizontal: 20, paddingBottom: 16 },
+  body: { paddingHorizontal: 24, paddingTop: 14, paddingBottom: 22 },
+  footer: { paddingHorizontal: 24, paddingBottom: 20 },
 });
