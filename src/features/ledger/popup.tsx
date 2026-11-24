@@ -1,6 +1,6 @@
 import { router } from 'expo-router';
 import type { ReactNode } from 'react';
-import { KeyboardAvoidingView, Platform, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { KeyboardAvoidingView, Platform, Pressable, ScrollView, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { useAppearance } from './appearance';
@@ -10,8 +10,10 @@ export function closePopup() {
   else router.replace('/');
 }
 
-export function Popup({ title, children, footer, scrollEnabled = true }: { title: string; children: ReactNode; footer?: ReactNode; scrollEnabled?: boolean }) {
+export function Popup({ title, children, footer, scrollEnabled = true, fixedSize = false }: { title: string; children: ReactNode; footer?: ReactNode; scrollEnabled?: boolean; fixedSize?: boolean }) {
   const { colors, ui } = useAppearance();
+  const { height: windowHeight } = useWindowDimensions();
+  const fixedHeight = Math.min(windowHeight * 0.82, 680);
 
   return (
     <SafeAreaView style={styles.root}>
@@ -21,7 +23,7 @@ export function Popup({ title, children, footer, scrollEnabled = true }: { title
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
         pointerEvents="box-none"
         style={styles.position}>
-        <View accessibilityViewIsModal style={[styles.panel, { backgroundColor: colors.paper }]}>
+        <View accessibilityViewIsModal style={[styles.panel, fixedSize && { height: fixedHeight }, { backgroundColor: colors.paper }]}>
           {/* ────────── 제목과 닫기 버튼 ────────── */}
           <View style={styles.header}>
             <Text accessibilityRole="header" style={[ui.title, styles.title]}>{title}</Text>
@@ -31,7 +33,7 @@ export function Popup({ title, children, footer, scrollEnabled = true }: { title
           </View>
 
           {/* ────────── 스크롤되는 내용과 하단 버튼 ────────── */}
-          <ScrollView scrollEnabled={scrollEnabled} style={styles.scroll} contentContainerStyle={styles.body} keyboardShouldPersistTaps="handled">
+          <ScrollView scrollEnabled={scrollEnabled} style={[styles.scroll, fixedSize && styles.fixedScroll]} contentContainerStyle={styles.body} keyboardShouldPersistTaps="handled">
             {children}
           </ScrollView>
           {footer && <View style={styles.footer}>{footer}</View>}
@@ -51,6 +53,7 @@ const styles = StyleSheet.create({
   close: { minWidth: 44, minHeight: 44, alignItems: 'center', justifyContent: 'center' },
   closeText: { fontSize: 28, lineHeight: 32 },
   scroll: { flexGrow: 0, flexShrink: 1 },
+  fixedScroll: { flex: 1 },
   body: { paddingHorizontal: 24, paddingTop: 14, paddingBottom: 22 },
   footer: { paddingHorizontal: 24, paddingBottom: 20 },
 });

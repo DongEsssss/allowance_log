@@ -82,7 +82,7 @@ export default function SettingsScreen() {
   const title = page === 'csv' ? 'CSV 내보내기' : menus.find((menu) => menu.id === page)?.label ?? '설정';
 
   return (
-    <Popup key={page} title={title} scrollEnabled={page !== 'categories' || !dragging}>
+    <Popup key={page} title={title} scrollEnabled={page !== 'categories' || !dragging} fixedSize={page === 'categories'}>
       {page !== 'settings' && (
         <Pressable accessibilityRole="button" accessibilityLabel={page === 'csv' ? '데이터 관리로 돌아가기' : '설정으로 돌아가기'}
           style={styles.back} onPress={() => setPage(page === 'csv' ? 'data' : 'settings')}>
