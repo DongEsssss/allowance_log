@@ -37,7 +37,7 @@ export function ExpenseChart({ month }: { month: string }) {
                   return <Circle key={label} cx={80} cy={80} r={radius} fill="none"
                     stroke={chartColors[index % chartColors.length]} strokeWidth={20}
                     strokeDasharray={`${length} ${circumference - length}`}
-                    strokeDashoffset={-start} rotation={-90} origin="80, 80" />;
+                    strokeDashoffset={-start} transform="rotate(-90 80 80)" />;
                 })}
               </Svg>
               <View pointerEvents="none" style={styles.center}>
