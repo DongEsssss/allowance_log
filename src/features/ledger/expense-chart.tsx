@@ -54,7 +54,7 @@ export function ExpenseChart({ month }: { month: string }) {
                   <Text numberOfLines={1} style={[styles.name, { color: colors.ink }]}>{label}</Text>
                   <View style={styles.rowAmount}>
                     <Text style={[styles.value, { color: colors.ink }]}>{formatAmount(amount)}원</Text>
-                    <Text style={[styles.percent, { color: colors.muted }]}>{Math.round(amount / total * 100)}%</Text>
+                    <Text style={[styles.percent, { color: colors.muted }]}>{(amount / total * 100).toFixed(1)}%</Text>
                   </View>
                 </View>
               ))}
