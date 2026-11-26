@@ -5,8 +5,8 @@ import { useAppearance } from './appearance';
 import { categoryLabel } from './categories';
 import { formatAmount, useLedger } from './ledger';
 
-const chartColors = ['#A56B58', '#6D8E82', '#D0A45D', '#8C80A7', '#7194B0', '#C38288', '#8D9D62', '#B58B6D'];
-const radius = 58;
+const chartColors = ['#D47962', '#7CA99A', '#E3B967', '#A394C2', '#79A6BF', '#D897A0', '#A5B679', '#B58B6D'];
+const radius = 82;
 const circumference = 2 * Math.PI * radius;
 
 export function ExpenseChart({ month }: { month: string }) {
@@ -24,34 +24,38 @@ export function ExpenseChart({ month }: { month: string }) {
   return (
     <View style={styles.section}>
       <Text accessibilityRole="header" style={[styles.title, { color: colors.ink }]}>이번 달 지출 통계</Text>
-      <View style={[styles.card, { backgroundColor: colors.paper }]}>
+      <View style={[styles.card, { backgroundColor: colors.paper, borderColor: colors.line }]}>
         {total === 0 ? (
           <Text style={[styles.empty, { color: colors.muted }]}>이번 달 지출 내역이 없어요.</Text>
         ) : (
           <>
             <View style={styles.chart} accessible accessibilityLabel={'이번 달 총 지출 ' + formatAmount(total) + '원'}>
-              <Svg width={160} height={160} viewBox="0 0 160 160">
+              <Svg width={220} height={220} viewBox="0 0 220 220">
+                <Circle cx={110} cy={110} r={radius} fill="none" stroke={colors.accentSurface} strokeWidth={22} />
                 {groups.map(([label, amount], index) => {
                   const length = circumference * amount / total;
                   const start = circumference * groups.slice(0, index).reduce((sum, [, value]) => sum + value, 0) / total;
-                  return <Circle key={label} cx={80} cy={80} r={radius} fill="none"
-                    stroke={chartColors[index % chartColors.length]} strokeWidth={20}
-                    strokeDasharray={`${length} ${circumference - length}`}
-                    strokeDashoffset={-start} transform="rotate(-90 80 80)" />;
+                  const gap = groups.length > 1 ? Math.min(3, length * 0.15) : 0;
+                  return <Circle key={label} cx={110} cy={110} r={radius} fill="none"
+                    stroke={chartColors[index % chartColors.length]} strokeWidth={22}
+                    strokeDasharray={`${length - gap} ${circumference - length + gap}`}
+                    strokeDashoffset={-start - gap / 2} transform="rotate(-90 110 110)" />;
                 })}
               </Svg>
               <View pointerEvents="none" style={styles.center}>
-                <Text style={[styles.centerLabel, { color: colors.muted }]}>총 지출</Text>
+                <Text style={[styles.centerLabel, { color: colors.muted }]}>이번 달 총 지출</Text>
                 <Text adjustsFontSizeToFit numberOfLines={1} style={[styles.centerAmount, { color: colors.ink }]}>{formatAmount(total)}원</Text>
               </View>
             </View>
-            <View style={styles.legend}>
+            <View style={[styles.legend, { borderTopColor: colors.line }]}>
               {groups.map(([label, amount], index) => (
                 <View key={label} style={styles.row}>
                   <View style={[styles.dot, { backgroundColor: chartColors[index % chartColors.length] }]} />
-                  <Text style={[styles.name, { color: colors.ink }]}>{label}</Text>
-                  <Text style={[styles.value, { color: colors.ink }]}>{formatAmount(amount)}원</Text>
-                  <Text style={[styles.percent, { color: colors.muted }]}>{Math.round(amount / total * 100)}%</Text>
+                  <Text numberOfLines={1} style={[styles.name, { color: colors.ink }]}>{label}</Text>
+                  <View style={styles.rowAmount}>
+                    <Text style={[styles.value, { color: colors.ink }]}>{formatAmount(amount)}원</Text>
+                    <Text style={[styles.percent, { color: colors.muted }]}>{Math.round(amount / total * 100)}%</Text>
+                  </View>
                 </View>
               ))}
             </View>
@@ -65,16 +69,17 @@ export function ExpenseChart({ month }: { month: string }) {
 const styles = StyleSheet.create({
   section: { gap: 16 },
   title: { fontSize: 19, fontWeight: '700' },
-  card: { borderRadius: 14, padding: 20, gap: 20 },
+  card: { borderRadius: 24, padding: 20, gap: 24, borderWidth: StyleSheet.hairlineWidth },
   empty: { textAlign: 'center', paddingVertical: 20, fontSize: 14 },
-  chart: { width: 160, height: 160, alignSelf: 'center' },
+  chart: { width: 220, height: 220, alignSelf: 'center', marginVertical: 8 },
   center: { position: 'absolute', top: 0, right: 0, bottom: 0, left: 0, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 25 },
-  centerLabel: { fontSize: 12, marginBottom: 4 },
-  centerAmount: { fontSize: 15, fontWeight: '700' },
-  legend: { gap: 12 },
-  row: { flexDirection: 'row', alignItems: 'center', gap: 8 },
-  dot: { width: 9, height: 9, borderRadius: 5 },
-  name: { flex: 1, fontSize: 14 },
-  value: { fontSize: 14, fontWeight: '600', fontVariant: ['tabular-nums'] },
-  percent: { width: 42, textAlign: 'right', fontSize: 13, fontVariant: ['tabular-nums'] },
+  centerLabel: { fontSize: 12, fontWeight: '600', marginBottom: 6 },
+  centerAmount: { fontSize: 20, fontWeight: '800', letterSpacing: -0.8, fontVariant: ['tabular-nums'] },
+  legend: { borderTopWidth: StyleSheet.hairlineWidth, paddingTop: 16, gap: 16 },
+  row: { flexDirection: 'row', alignItems: 'center', gap: 10 },
+  dot: { width: 10, height: 10, borderRadius: 5 },
+  name: { flex: 1, fontSize: 14, fontWeight: '600' },
+  rowAmount: { alignItems: 'flex-end', gap: 2 },
+  value: { fontSize: 14, fontWeight: '700', fontVariant: ['tabular-nums'] },
+  percent: { fontSize: 12, fontVariant: ['tabular-nums'] },
 });
