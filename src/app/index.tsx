@@ -8,7 +8,6 @@ import { formatAmount, localDate, useLedger } from '@/features/ledger/ledger';
 import { useAppearance } from '@/features/ledger/appearance';
 import { BottomMenu } from '@/features/ledger/bottom-menu';
 import { EntryList } from '@/features/ledger/entry-list';
-import { ExpenseChart } from '@/features/ledger/expense-chart';
 import { type Palette } from '@/features/ledger/styles';
 
 export default function HomeScreen() {
@@ -60,8 +59,6 @@ export default function HomeScreen() {
             </View>
           </View>
         </View>
-
-        <ExpenseChart month={year + '-' + month} />
 
         {/* ────────── 최근 기록 ────────── */}
         <View style={styles.recent}>

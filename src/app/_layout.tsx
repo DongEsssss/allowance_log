@@ -21,6 +21,7 @@ function AppStack() {
       <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: colors.background } }}>
         <Stack.Screen name="index" />
         <Stack.Screen name="calendar" />
+        <Stack.Screen name="statistics" />
         {/* ────────── 홈 화면 위에 표시할 팝업 ────────── */}
         <Stack.Screen name="add" options={popupOptions} />
         <Stack.Screen name="settings" options={popupOptions} />

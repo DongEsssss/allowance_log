@@ -8,10 +8,11 @@ import { useAppearance } from './appearance';
 const items = [
   { href: '/', label: '홈', icon: { ios: 'house', android: 'home', web: 'home' } },
   { href: '/calendar', label: '달력', icon: { ios: 'calendar', android: 'calendar_month', web: 'calendar_month' } },
+  { href: '/statistics', label: '통계', icon: { ios: 'chart.pie', android: 'pie_chart', web: 'pie_chart' } },
   { href: '/settings', label: '설정', icon: { ios: 'gearshape', android: 'settings', web: 'settings' } },
 ] as const;
 
-export function BottomMenu({ active }: { active: '/' | '/calendar' }) {
+export function BottomMenu({ active }: { active: '/' | '/calendar' | '/statistics' }) {
   const { colors, ui } = useAppearance();
 
   return (
